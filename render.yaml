@@ -1,0 +1,44 @@
+# Blueprint Render — https://render.com/docs/blueprint-spec
+# Conectá el repo y usá "New Blueprint" con este archivo.
+
+services:
+  - type: web
+    name: aris-bags-api
+    runtime: docker
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: .
+    plan: free
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: "4000"
+      - key: DATABASE_URL
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
+      - key: CORS_ORIGIN
+        sync: false
+      - key: CLOUDINARY_CLOUD_NAME
+        sync: false
+      - key: CLOUDINARY_API_KEY
+        sync: false
+      - key: CLOUDINARY_API_SECRET
+        sync: false
+      - key: CLOUDINARY_FOLDER
+        value: aris-bags
+
+  - type: web
+    name: aris-bags-web
+    runtime: static
+    buildCommand: npm ci && npm run build:frontend
+    staticPublishPath: ./frontend/dist
+    pullRequestPreviewsEnabled: true
+    envVars:
+      - key: VITE_API_URL
+        sync: false
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html

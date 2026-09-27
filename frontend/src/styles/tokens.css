@@ -1,0 +1,19 @@
+:root {
+  --ink: #2a2426;
+  --ink-soft: #6d5c61;
+  --paper: #fff6f3;
+  --paper-deep: #f8e4e8;
+  --paper-card: #fffbfa;
+  --clay: #e091a3;
+  --clay-deep: #c96b80;
+  --honey: #f3b7c2;
+  --sage: #7d9b8f;
+  --line: rgba(42, 36, 38, 0.1);
+  --shadow: 0 18px 40px rgba(42, 36, 38, 0.07);
+  --radius: 1.25rem;
+  --header-h: 4.5rem;
+  --max: 72rem;
+  --font-display: "Fraunces", "Times New Roman", serif;
+  --font-body: "Figtree", "Segoe UI", sans-serif;
+  --font-char: "Baloo 2", "Figtree", sans-serif;
+}
