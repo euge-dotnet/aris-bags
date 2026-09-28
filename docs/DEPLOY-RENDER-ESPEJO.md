@@ -27,6 +27,8 @@ El repo en Eugecom **no se borra ni se mueve**.
 
 1. GitHub **euge-dotnet** → **Settings** → **Developer settings** → **Personal access tokens** → **Fine-grained** (o classic con scope `repo`).
 2. Permiso de escritura solo en `euge-dotnet/aris-bags`.
+3. Si **euge-dotnet** es una organización: en la lista de tokens, **Authorize SSO** para esa org.
+4. El token lo creás estando logueado como **euge-dotnet**, no como Eugecom.
 3. Copiá el token (solo se muestra una vez).
 
 ---
@@ -39,7 +41,7 @@ El repo en Eugecom **no se borra ni se mueve**.
    - Value: el token del paso 2.
 3. **Variables** → **New repository variable**
    - Name: `RENDER_MIRROR_REPO`
-   - Value: `euge-dotnet/aris-bags`
+   - Value: el repo que usa Render, ej. `eugenio-ctrl/aris-bags` o `euge-dotnet/aris-bags` (usuario/nombre exacto en la URL de GitHub)
 
 ---
 

@@ -23,8 +23,9 @@ jobs:
           MIRROR_REPO: ${{ vars.RENDER_MIRROR_REPO }}
         run: |
           if [ -z "$MIRROR_TOKEN" ] || [ -z "$MIRROR_REPO" ]; then
-            echo "Skip: configurá RENDER_MIRROR_TOKEN (secret) y RENDER_MIRROR_REPO (variable), ej. euge-dotnet/aris-bags"
-            exit 0
+            echo "Falta RENDER_MIRROR_TOKEN (secret) o RENDER_MIRROR_REPO (variable), ej. euge-dotnet/aris-bags"
+            exit 1
           fi
-          git remote add mirror "https://x-access-token:${MIRROR_TOKEN}@github.com/${MIRROR_REPO}.git"
-          git push mirror HEAD:main --force
+          # checkout@v4 deja credenciales de GITHUB_TOKEN; hay que quitarlas para usar el PAT.
+          git config --local --unset-all http.https://github.com/.extraheader || true
+          git push "https://x-access-token:${MIRROR_TOKEN}@github.com/${MIRROR_REPO}.git" HEAD:main --force
