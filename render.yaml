@@ -4,10 +4,10 @@
 services:
   - type: web
     name: aris-bags-api
-    runtime: docker
-    dockerfilePath: ./backend/Dockerfile
-    dockerContext: .
+    runtime: node
     plan: free
+    buildCommand: npm ci && npm run db:generate -w backend && npm run build -w backend
+    startCommand: npm run start:render -w backend
     healthCheckPath: /api/health
     envVars:
       - key: NODE_ENV

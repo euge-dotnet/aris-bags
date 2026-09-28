@@ -1,5 +1,7 @@
 # Poner Ari´s Bags en línea
 
+Si Render usa **otra cuenta de GitHub** que la del repo (`Eugecom/aris-bags`), usá el espejo automático: **`docs/DEPLOY-RENDER-ESPEJO.md`**.
+
 ## Resumen
 
 | Pieza | Dónde |
