@@ -23,13 +23,29 @@ El repo en Eugecom **no se borra ni se mueve**.
 
 ---
 
-## Paso 2 — Token para el espejo
+## Paso 2 — Deploy key (escritura en euge-dotnet/aris-bags)
 
-1. GitHub **euge-dotnet** → **Settings** → **Developer settings** → **Personal access tokens** → **Fine-grained** (o classic con scope `repo`).
-2. Permiso de escritura solo en `euge-dotnet/aris-bags`.
-3. Si **euge-dotnet** es una organización: en la lista de tokens, **Authorize SSO** para esa org.
-4. El token lo creás estando logueado como **euge-dotnet**, no como Eugecom.
-3. Copiá el token (solo se muestra una vez).
+Los PAT suelen fallar con 403; usamos **deploy key**.
+
+1. En PowerShell (una vez):
+
+```powershell
+ssh-keygen -t ed25519 -f $env:USERPROFILE\.ssh\arisbag-mirror -N '""'
+Get-Content $env:USERPROFILE\.ssh\arisbag-mirror.pub
+```
+
+2. Copiá la línea que empieza con `ssh-ed25519`.
+
+3. GitHub como **euge-dotnet** → repo **aris-bags** → **Settings** → **Deploy keys** → **Add deploy key**.
+   - Title: `eugecom-mirror`
+   - Key: pegá la clave pública
+   - Marcá **Allow write access** (importante)
+
+4. Copiá la clave **privada** (no la subas al repo):
+
+```powershell
+Get-Content $env:USERPROFILE\.ssh\arisbag-mirror
+```
 
 ---
 
@@ -37,11 +53,10 @@ El repo en Eugecom **no se borra ni se mueve**.
 
 1. GitHub **Eugecom** → repo **aris-bags** → **Settings** → **Secrets and variables** → **Actions**.
 2. **New repository secret**
-   - Name: `RENDER_MIRROR_TOKEN`
-   - Value: el token del paso 2.
-3. **Variables** → **New repository variable**
-   - Name: `RENDER_MIRROR_REPO`
-   - Value: el repo que usa Render, ej. `eugenio-ctrl/aris-bags` o `euge-dotnet/aris-bags` (usuario/nombre exacto en la URL de GitHub)
+   - Name: `MIRROR_DEPLOY_KEY`
+   - Value: contenido completo de la clave privada (`-----BEGIN ...`)
+3. Podés borrar el secret viejo `RENDER_MIRROR_TOKEN` (ya no se usa).
+4. **Variables** → `RENDER_MIRROR_REPO` = `euge-dotnet/aris-bags`
 
 ---
 

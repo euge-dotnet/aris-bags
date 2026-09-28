@@ -1,5 +1,5 @@
-# Copia main de Eugecom/aris-bags → euge-dotnet/aris-bags para que Render despliegue
-# sin cambiar de cuenta en Render. Ver docs/DEPLOY-RENDER-ESPEJO.md
+# Copia main de Eugecom/aris-bags → repo de Render (ej. euge-dotnet/aris-bags).
+# Usa deploy key con escritura. Ver docs/DEPLOY-RENDER-ESPEJO.md
 
 name: Mirror for Render
 
@@ -17,15 +17,23 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Push mirror
+      - name: Configure SSH deploy key
         env:
-          MIRROR_TOKEN: ${{ secrets.RENDER_MIRROR_TOKEN }}
+          DEPLOY_KEY: ${{ secrets.MIRROR_DEPLOY_KEY }}
           MIRROR_REPO: ${{ vars.RENDER_MIRROR_REPO }}
         run: |
-          if [ -z "$MIRROR_TOKEN" ] || [ -z "$MIRROR_REPO" ]; then
-            echo "Falta RENDER_MIRROR_TOKEN (secret) o RENDER_MIRROR_REPO (variable), ej. euge-dotnet/aris-bags"
+          if [ -z "$DEPLOY_KEY" ] || [ -z "$MIRROR_REPO" ]; then
+            echo "Faltan MIRROR_DEPLOY_KEY (secret) o RENDER_MIRROR_REPO (variable)."
             exit 1
           fi
-          # checkout@v4 deja credenciales de GITHUB_TOKEN; hay que quitarlas para usar el PAT.
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$DEPLOY_KEY" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -t ed25519 github.com >> ~/.ssh/known_hosts
+
+      - name: Push mirror
+        env:
+          MIRROR_REPO: ${{ vars.RENDER_MIRROR_REPO }}
+        run: |
           git config --local --unset-all http.https://github.com/.extraheader || true
-          git push "https://x-access-token:${MIRROR_TOKEN}@github.com/${MIRROR_REPO}.git" HEAD:main --force
+          git push "git@github.com:${MIRROR_REPO}.git" HEAD:main --force
